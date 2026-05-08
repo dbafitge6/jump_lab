@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(defaults read *)",
+      "Bash(open *)",
+      "Bash(xcrun altool *)",
+      "Bash(xcrun notarytool *)",
+      "Bash(fastlane --version)",
+      "Bash(flutter build *)",
+      "Bash(screencapture -x /tmp/browser_screen.png)",
+      "Bash(osascript -e 'tell application \"Safari\" to activate')",
+      "Bash(osascript -e 'tell application \"Google Chrome\" to activate')",
+      "Bash(osascript -e 'tell application \"Arc\" to activate')",
+      "Bash(screencapture -x /tmp/browser_screen2.png)",
+      "Bash(osascript -e 'tell application \"Safari\" *)",
+      "Bash(screencapture -x /tmp/browser_screen3.png)",
+      "Bash(security find-identity *)",
+      "Bash(flutter --version)",
+      "Bash(flutter create *)",
+      "Bash(flutter pub *)",
+      "Bash(curl -s \"https://www.mext.go.jp/content/20230428-mxt_kagsei-mext_00001_012.csv\" -o /tmp/food_db_test.csv)",
+      "Read(//private/tmp/**)",
+      "Bash(flutter analyze *)",
+      "Bash(pod repo *)",
+      "Bash(git -C /Users/kobayashikazuya/jump_lab status)",
+      "Bash(git -C /Users/kobayashikazuya/eat status)",
+      "Bash(gh auth *)",
+      "Bash(brew install *)"
+    ]
+  }
+}

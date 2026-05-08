@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<body>
+<canvas id="c" width="1024" height="1024"></canvas>
+<script>
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+
+// Background
+ctx.fillStyle = '#0A0A0A';
+ctx.beginPath();
+ctx.roundRect(0, 0, 1024, 1024, 180);
+ctx.fill();
+
+// Ground line
+ctx.strokeStyle = '#00E5FF';
+ctx.globalAlpha = 0.3;
+ctx.lineWidth = 3;
+ctx.beginPath();
+ctx.moveTo(200, 800);
+ctx.lineTo(824, 800);
+ctx.stroke();
+
+// Jump arc
+ctx.globalAlpha = 0.4;
+ctx.setLineDash([12, 9]);
+ctx.lineWidth = 2;
+ctx.beginPath();
+ctx.moveTo(360, 740);
+ctx.quadraticCurveTo(512, 300, 664, 740);
+ctx.stroke();
+ctx.setLineDash([]);
+
+ctx.globalAlpha = 1.0;
+ctx.fillStyle = '#00E5FF';
+
+// Head
+ctx.beginPath();
+ctx.arc(512, 370, 50, 0, Math.PI * 2);
+ctx.fill();
+
+// Torso
+ctx.beginPath();
+ctx.roundRect(484, 415, 56, 110, 18);
+ctx.fill();
+
+// Arms
+ctx.lineWidth = 22;
+ctx.strokeStyle = '#00E5FF';
+ctx.lineCap = 'round';
+ctx.beginPath();
+ctx.moveTo(484, 450);
+ctx.lineTo(420, 370);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(540, 450);
+ctx.lineTo(600, 370);
+ctx.stroke();
+
+// Hands
+ctx.beginPath();
+ctx.arc(414, 362, 16, 0, Math.PI * 2);
+ctx.fill();
+ctx.beginPath();
+ctx.arc(608, 362, 16, 0, Math.PI * 2);
+ctx.fill();
+
+// Legs
+ctx.beginPath();
+ctx.moveTo(496, 522);
+ctx.lineTo(450, 600);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(450, 600);
+ctx.lineTo(400, 572);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(528, 522);
+ctx.lineTo(574, 600);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(574, 600);
+ctx.lineTo(622, 572);
+ctx.stroke();
+
+// Feet
+ctx.beginPath();
+ctx.ellipse(390, 567, 22, 12, 0, 0, Math.PI * 2);
+ctx.fill();
+ctx.beginPath();
+ctx.ellipse(632, 567, 22, 12, 0, 0, Math.PI * 2);
+ctx.fill();
+
+// Height measurement
+ctx.globalAlpha = 0.6;
+ctx.lineWidth = 2;
+ctx.strokeStyle = '#00E5FF';
+ctx.setLineDash([]);
+ctx.beginPath();
+ctx.moveTo(720, 420);
+ctx.lineTo(720, 800);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(705, 420);
+ctx.lineTo(735, 420);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(705, 800);
+ctx.lineTo(735, 800);
+ctx.stroke();
+
+// Text
+ctx.globalAlpha = 1.0;
+ctx.fillStyle = '#00E5FF';
+ctx.font = 'bold 80px Arial';
+ctx.textAlign = 'center';
+ctx.fillText('JUMP', 512, 900);
+ctx.font = '42px Arial';
+ctx.globalAlpha = 0.7;
+ctx.fillText('LAB', 512, 960);
+
+const link = document.createElement('a');
+link.download = 'icon.png';
+link.href = c.toDataURL();
+link.click();
+</script>
+</body>
+</html>
