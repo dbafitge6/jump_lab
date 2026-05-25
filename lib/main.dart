@@ -9,7 +9,11 @@ import 'purchase_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MobileAds.instance.initialize();
+  try {
+    await MobileAds.instance.initialize();
+  } catch (e) {
+    debugPrint('AdMob初期化エラー: $e');
+  }
   await PurchaseManager.instance.initialize();
   runApp(const JumpLabApp());
 }

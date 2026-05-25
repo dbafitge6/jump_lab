@@ -34,6 +34,8 @@
 	<string>動画撮影のためにマイクを使用します</string>
 	<key>NSMotionUsageDescription</key>
 	<string>ジャンプの高さを計測するために加速度センサーを使用します</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>ジャンプ計測用の動画を選択するためにフォトライブラリにアクセスします</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIDeviceFamily</key>
