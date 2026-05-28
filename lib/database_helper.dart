@@ -108,4 +108,10 @@ class DatabaseHelper {
     final db = await database;
     return await db.delete('records', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<List<String>> getAllDates() async {
+    final db = await database;
+    final maps = await db.query('records', columns: ['date'], orderBy: 'date ASC');
+    return maps.map((m) => m['date'] as String).toList();
+  }
 }

@@ -6,6 +6,9 @@ import 'database_helper.dart';
 import 'ad_helper.dart';
 import 'video_measure_screen.dart';
 import 'purchase_manager.dart';
+import 'share_manager.dart';
+import 'training_menu_screen.dart';
+import 'calendar_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +18,7 @@ void main() async {
     debugPrint('AdMob初期化エラー: $e');
   }
   await PurchaseManager.instance.initialize();
+  await ShareManager.instance.initialize();
   runApp(const JumpLabApp());
 }
 
@@ -64,8 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadBannerAd() async {
-    if (PurchaseManager.instance.isPremium) return;
     final ad = AdHelper.createBannerAd();
+    if (ad == null) return;
     await ad.load();
     setState(() {
       _bannerAd = ad;
@@ -347,6 +351,56 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 12),
+                    Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 40),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: OutlinedButton(
+                          onPressed: () => _navigateWithAd(
+                              const TrainingMenuScreen()),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: const Color(0xFF00E5FF),
+                            side: const BorderSide(
+                                color: Color(0xFF00E5FF)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: const Text(
+                            '💪 トレーニングメニュー',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 40),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: OutlinedButton(
+                          onPressed: () => _navigateWithAd(
+                              const CalendarScreen()),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.white54,
+                            side:
+                                const BorderSide(color: Colors.white24),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: const Text(
+                            '📅 カレンダー',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     if (!isPremium)
                       Padding(
                         padding:
@@ -373,6 +427,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
+                    const SizedBox(height: 12),
+                    Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 40),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 48,
+                        child: _ShareButton(
+                          onShared: () => setState(() {}),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 24),
                   ],
                 ),
@@ -387,6 +453,37 @@ class _HomeScreenState extends State<HomeScreen> {
               child: AdWidget(ad: _bannerAd!),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class _ShareButton extends StatelessWidget {
+  final VoidCallback onShared;
+  const _ShareButton({required this.onShared});
+
+  @override
+  Widget build(BuildContext context) {
+    final hasShared = ShareManager.instance.hasShared;
+    if (hasShared) {
+      return const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.check_circle, color: Color(0xFF00E5FF), size: 16),
+          SizedBox(width: 6),
+          Text('広告オフ中 ✓',
+              style: TextStyle(color: Color(0xFF00E5FF), fontSize: 14)),
+        ],
+      );
+    }
+    return TextButton(
+      onPressed: () async {
+        await ShareManager.instance.shareApp();
+        onShared();
+      },
+      child: const Text(
+        '📣 シェアして広告をオフ',
+        style: TextStyle(color: Colors.white38, fontSize: 14),
       ),
     );
   }

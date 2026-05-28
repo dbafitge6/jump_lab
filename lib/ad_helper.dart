@@ -1,15 +1,20 @@
 import 'dart:async';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter/material.dart';
+import 'purchase_manager.dart';
+import 'share_manager.dart';
 
 class AdHelper {
+  static bool get isAdFree =>
+      PurchaseManager.instance.isPremium || ShareManager.instance.hasShared;
   // 本番ID
   static const String bannerAdUnitId =
       'ca-app-pub-9251250149426348/5341111146';
   static const String interstitialAdUnitId =
       'ca-app-pub-9251250149426348/6794627761';
 
-  static BannerAd createBannerAd() {
+  static BannerAd? createBannerAd() {
+    if (isAdFree) return null;
     return BannerAd(
       adUnitId: bannerAdUnitId,
       size: AdSize.banner,
@@ -19,6 +24,7 @@ class AdHelper {
   }
 
   static Future<InterstitialAd?> loadInterstitialAd() async {
+    if (isAdFree) return null;
     InterstitialAd? ad;
     final completer = Completer<void>();
 

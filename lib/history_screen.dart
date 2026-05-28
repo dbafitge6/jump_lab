@@ -25,6 +25,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Future<void> _loadBannerAd() async {
     final ad = AdHelper.createBannerAd();
+    if (ad == null) return;
     await ad.load();
     setState(() {
       _bannerAd = ad;
