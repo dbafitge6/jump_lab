@@ -120,74 +120,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _showPremiumDialog() async {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        backgroundColor: const Color(0xFF1A1A1A),
-        title: const Text(
-          'プレミアムプラン',
-          style: TextStyle(color: Colors.white),
-        ),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('月180円で以下が使えます！',
-                style: TextStyle(color: Colors.white70)),
-            SizedBox(height: 12),
-            Text('✅ 広告なし',
-                style: TextStyle(color: Color(0xFF00E5FF))),
-            Text('✅ 動画計測無制限',
-                style: TextStyle(color: Color(0xFF00E5FF))),
-            Text('✅ 履歴無制限',
-                style: TextStyle(color: Color(0xFF00E5FF))),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('キャンセル',
-                style: TextStyle(color: Colors.white54)),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final success =
-                  await PurchaseManager.instance.purchasePremium();
-              if (success && mounted) {
-                setState(() {});
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('プレミアム登録完了！'),
-                    backgroundColor: Color(0xFF00E5FF),
-                  ),
-                );
-              }
-            },
-            child: const Text('登録する',
-                style: TextStyle(
-                    color: Color(0xFF00E5FF),
-                    fontWeight: FontWeight.bold)),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final success =
-                  await PurchaseManager.instance.restorePurchases();
-              if (success && mounted) {
-                setState(() {});
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('購入を復元しました！'),
-                    backgroundColor: Color(0xFF00E5FF),
-                  ),
-                );
-              }
-            },
-            child: const Text('購入を復元',
-                style: TextStyle(color: Colors.white54)),
-          ),
-        ],
-      ),
-    );
+      builder: (_) => const _PremiumDialog(),
+    ).then((_) {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
@@ -485,6 +421,91 @@ class _ShareButton extends StatelessWidget {
         '📣 シェアして広告をオフ',
         style: TextStyle(color: Colors.white38, fontSize: 14),
       ),
+    );
+  }
+}
+
+class _PremiumDialog extends StatefulWidget {
+  const _PremiumDialog();
+
+  @override
+  State<_PremiumDialog> createState() => _PremiumDialogState();
+}
+
+class _PremiumDialogState extends State<_PremiumDialog> {
+  bool _loading = false;
+
+  Future<void> _purchase() async {
+    setState(() => _loading = true);
+    final result = await PurchaseManager.instance.purchasePremium();
+    if (!mounted) return;
+    setState(() => _loading = false);
+
+    if (result.success) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('プレミアム登録完了！'),
+          backgroundColor: Color(0xFF00E5FF),
+        ),
+      );
+    } else if (result.error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result.error!)),
+      );
+    }
+  }
+
+  Future<void> _restore() async {
+    setState(() => _loading = true);
+    final success = await PurchaseManager.instance.restorePurchases();
+    if (!mounted) return;
+    setState(() => _loading = false);
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(success ? '購入を復元しました！' : '復元できる購入が見つかりませんでした'),
+        backgroundColor: success ? const Color(0xFF00E5FF) : null,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: const Color(0xFF1A1A1A),
+      title: const Text('プレミアムプラン', style: TextStyle(color: Colors.white)),
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('月180円で以下が使えます！', style: TextStyle(color: Colors.white70)),
+          SizedBox(height: 12),
+          Text('✅ 広告なし', style: TextStyle(color: Color(0xFF00E5FF))),
+          Text('✅ 動画計測無制限', style: TextStyle(color: Color(0xFF00E5FF))),
+          Text('✅ 履歴無制限', style: TextStyle(color: Color(0xFF00E5FF))),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: _loading ? null : () => Navigator.pop(context),
+          child: const Text('キャンセル', style: TextStyle(color: Colors.white54)),
+        ),
+        TextButton(
+          onPressed: _loading ? null : _purchase,
+          child: _loading
+              ? const SizedBox(
+                  width: 16, height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF00E5FF)),
+                )
+              : const Text('登録する',
+                  style: TextStyle(color: Color(0xFF00E5FF), fontWeight: FontWeight.bold)),
+        ),
+        TextButton(
+          onPressed: _loading ? null : _restore,
+          child: const Text('購入を復元', style: TextStyle(color: Colors.white54)),
+        ),
+      ],
     );
   }
 }

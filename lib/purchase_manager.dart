@@ -38,21 +38,30 @@ class PurchaseManager {
     }
   }
 
-  Future<bool> purchasePremium() async {
+  Future<({bool success, String? error})> purchasePremium() async {
     try {
       final offerings = await Purchases.getOfferings();
-      if (offerings.current == null) return false;
+      if (offerings.current == null) {
+        return (success: false, error: '商品情報を取得できませんでした。しばらく後でお試しください。');
+      }
 
       final package = offerings.current!.monthly;
-      if (package == null) return false;
+      if (package == null) {
+        return (success: false, error: 'プレミアムプランが見つかりませんでした。');
+      }
 
-      final purchaseResult = await Purchases.purchasePackage(package);
-      final customerInfo = purchaseResult.customerInfo;
-      _isPremium = customerInfo.entitlements.active.containsKey(premiumEntitlement);
-      return _isPremium;
+      final result = await Purchases.purchase(PurchaseParams.package(package));
+      _isPremium = result.customerInfo.entitlements.active.containsKey(premiumEntitlement);
+      return (success: _isPremium, error: null);
+    } on PurchasesErrorCode catch (e) {
+      if (e == PurchasesErrorCode.purchaseCancelledError) {
+        return (success: false, error: null);
+      }
+      debugPrint('購入エラー: $e');
+      return (success: false, error: '購入処理でエラーが発生しました。');
     } catch (e) {
       debugPrint('購入エラー: $e');
-      return false;
+      return (success: false, error: '購入処理でエラーが発生しました。');
     }
   }
 
