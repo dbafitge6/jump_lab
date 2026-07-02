@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TrainingItem {
   final String name;
@@ -82,9 +83,43 @@ class TrainingMenuScreen extends StatefulWidget {
   State<TrainingMenuScreen> createState() => _TrainingMenuScreenState();
 }
 
+const _completedPrefsKey = 'training_completed_items';
+
 class _TrainingMenuScreenState extends State<TrainingMenuScreen> {
   String _category = '全て';
   String _level = '全て';
+  Set<String> _completed = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCompleted();
+  }
+
+  Future<void> _loadCompleted() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _completed = (prefs.getStringList(_completedPrefsKey) ?? []).toSet();
+    });
+  }
+
+  Future<void> _toggleCompleted(String name) async {
+    setState(() {
+      if (_completed.contains(name)) {
+        _completed.remove(name);
+      } else {
+        _completed.add(name);
+      }
+    });
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_completedPrefsKey, _completed.toList());
+  }
+
+  Future<void> _resetCompleted() async {
+    setState(() => _completed = {});
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_completedPrefsKey);
+  }
 
   List<TrainingItem> get _filtered => _items.where((item) {
         final catOk = _category == '全て' || item.category == _category;
@@ -141,6 +176,14 @@ class _TrainingMenuScreenState extends State<TrainingMenuScreen> {
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
         title: const Text('トレーニングメニュー'),
+        actions: [
+          if (_completed.isNotEmpty)
+            IconButton(
+              onPressed: _resetCompleted,
+              icon: const Icon(Icons.refresh),
+              tooltip: '実施記録をリセット',
+            ),
+        ],
       ),
       body: Column(
         children: [
@@ -156,10 +199,14 @@ class _TrainingMenuScreenState extends State<TrainingMenuScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text('${filtered.length}種目',
-                  style: const TextStyle(color: Colors.white38, fontSize: 12)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('${filtered.length}種目',
+                    style: const TextStyle(color: Colors.white38, fontSize: 12)),
+                Text('実施済み ${_completed.length}/${_items.length}',
+                    style: const TextStyle(color: Color(0xFF00E5FF), fontSize: 12)),
+              ],
             ),
           ),
           Expanded(
@@ -168,14 +215,24 @@ class _TrainingMenuScreenState extends State<TrainingMenuScreen> {
               itemCount: filtered.length,
               itemBuilder: (_, i) {
                 final item = filtered[i];
+                final isDone = _completed.contains(item.name);
                 return Card(
                   color: const Color(0xFF1A1A1A),
                   margin: const EdgeInsets.only(bottom: 10),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: isDone
+                        ? const BorderSide(color: Color(0xFF00E5FF), width: 1)
+                        : BorderSide.none,
+                  ),
                   child: ListTile(
                     onTap: () => _showDetail(item),
                     title: Text(item.name,
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        style: TextStyle(
+                          color: isDone ? Colors.white54 : Colors.white,
+                          fontWeight: FontWeight.bold,
+                          decoration: isDone ? TextDecoration.lineThrough : null,
+                        )),
                     subtitle: Padding(
                       padding: const EdgeInsets.only(top: 6),
                       child: Row(
@@ -186,7 +243,14 @@ class _TrainingMenuScreenState extends State<TrainingMenuScreen> {
                         ],
                       ),
                     ),
-                    trailing: const Icon(Icons.chevron_right, color: Colors.white38),
+                    trailing: IconButton(
+                      onPressed: () => _toggleCompleted(item.name),
+                      icon: Icon(
+                        isDone ? Icons.check_circle : Icons.check_circle_outline,
+                        color: isDone ? const Color(0xFF00E5FF) : Colors.white38,
+                      ),
+                      tooltip: isDone ? '実施済み' : '実施済みにする',
+                    ),
                   ),
                 );
               },

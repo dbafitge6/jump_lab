@@ -40,6 +40,63 @@ class _CalendarScreenState extends State<CalendarScreen> {
         _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month + 1);
       });
 
+  Future<void> _showDayRecords(DateTime day) async {
+    final dateStr =
+        '${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}';
+    final records = await DatabaseHelper.instance.getRecordsByDate(dateStr);
+    if (!mounted) return;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1A1A1A),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('${day.year}年${day.month}月${day.day}日の記録',
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            if (records.isEmpty)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text('この日の記録はありません',
+                    style: TextStyle(color: Colors.white54)),
+              )
+            else
+              ...records.map((r) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${r.jump1}cm / ${r.jump2}cm / ${r.jump3}cm',
+                          style: const TextStyle(
+                              color: Colors.white70, fontSize: 13),
+                        ),
+                        Text(
+                          'ベスト ${r.best.toStringAsFixed(1)}cm',
+                          style: const TextStyle(
+                              color: Color(0xFF00E5FF),
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  )),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,6 +116,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           _CalendarGrid(
             focusedMonth: _focusedMonth,
             recordedDates: _recordedDates,
+            onDayTap: _showDayRecords,
           ),
           const SizedBox(height: 16),
           Text(
@@ -107,8 +165,13 @@ class _MonthNavigator extends StatelessWidget {
 class _CalendarGrid extends StatelessWidget {
   final DateTime focusedMonth;
   final Set<String> recordedDates;
+  final ValueChanged<DateTime> onDayTap;
 
-  const _CalendarGrid({required this.focusedMonth, required this.recordedDates});
+  const _CalendarGrid({
+    required this.focusedMonth,
+    required this.recordedDates,
+    required this.onDayTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -157,29 +220,33 @@ class _CalendarGrid extends StatelessWidget {
                   DateTime.now().month == focusedMonth.month &&
                   DateTime.now().day == day;
 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '$day',
-                    style: TextStyle(
-                      color: isToday
-                          ? const Color(0xFF00E5FF)
-                          : Colors.white70,
-                      fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
-                      fontSize: 14,
+              return GestureDetector(
+                onTap: () =>
+                    onDayTap(DateTime(focusedMonth.year, focusedMonth.month, day)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '$day',
+                      style: TextStyle(
+                        color: isToday
+                            ? const Color(0xFF00E5FF)
+                            : Colors.white70,
+                        fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 3),
-                  Container(
-                    width: 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: hasRecord ? const Color(0xFF00E5FF) : Colors.transparent,
+                    const SizedBox(height: 3),
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: hasRecord ? const Color(0xFF00E5FF) : Colors.transparent,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           ),

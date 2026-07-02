@@ -114,4 +114,15 @@ class DatabaseHelper {
     final maps = await db.query('records', columns: ['date'], orderBy: 'date ASC');
     return maps.map((m) => m['date'] as String).toList();
   }
+
+  Future<List<JumpRecord>> getRecordsByDate(String dateStr) async {
+    final db = await database;
+    final maps = await db.query(
+      'records',
+      where: 'date LIKE ?',
+      whereArgs: ['$dateStr%'],
+      orderBy: 'date DESC',
+    );
+    return maps.map((map) => JumpRecord.fromMap(map)).toList();
+  }
 }
