@@ -1,17 +1,198 @@
-# jump_lab
+# 🏃 jump_lab - Your Jump Height Tracker
 
-A new Flutter project.
+<div align="center">
 
-## Getting Started
+**スマホでジャンプ力を測定・記録・トレーニング**
 
-This project is a starting point for a Flutter application.
+毎日のジャンプで、体の成長を感じよう。
 
-A few resources to get you started if this is your first Flutter project:
+[App Store](#) • [Google Play](#) • [GitHub](#)
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+![Version](https://img.shields.io/badge/version-1.0.1-blue)
+![Flutter](https://img.shields.io/badge/Flutter-3.11+-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+</div>
+
+---
+
+## 🎯 jump_lab とは？
+
+**ジャンプ力を簡単に測定できる、日本初のスマートアプリ。**
+
+ジムに行かなくても、自宅でスマホ1つで「今のジャンプ力」が分かります。
+毎日1回、その日の記録を残す。グラフで成長を実感する。
+
+> "ジャンプ力を測定できるアプリなんて、日本にはほぼない。"
+> > だからこそ、jump_lab は可能性に満ちている。
+> >
+> > ---
+> >
+> > ## ✨ 主な機能
+> >
+> > ### 📏 ジャンプ高さ自動測定
+> > - **センサー測定**: スマホのジャンプ計を使った正確な測定
+> > - - **ビデオ測定**: カメラで姿勢を記録しながら測定
+> >   - - 誰でも簡単、追加機器不要
+> >    
+> >     - ### 📊 毎日の記録・グラフ表示
+> >     - - 日々のジャンプ高さを自動保存
+> >       - - カレンダービューで「いつ測定したか」が一目瞭然
+> >         - - 月間グラフで成長が見える化
+> >          
+> >           - ### 🏋️ 4種類の日替わりトレーニング
+> >           - 毎日異なるトレーニングがランダムに提案される
+> >          
+> >           - - **Plyometric** (プライオメトリクス) - 爆発力を鍛える
+> >             - - **Strength** (筋力) - 基礎体力を強化
+> >               - - **Technique** (技術) - フォームを改善
+> >                 - - **Mobility** (可動域) - 柔軟性を高める
+> >                  
+> >                   - > "1日1つでいい。完璧を目指さない。継続が力。"
+> >                     >
+> >                     > ### 💾 完全ローカル保存
+> >                     > - クラウド必須ではない
+> >                     > - - プライバシー第一
+> >                     >  
+> >                     >   - ### 🎁 成長の実感
+> >                     >   - - ストリーク機能（連続日数カウント）
+> >                     >     - - ベストジャンプ記録の自動更新
+> >                     >       - - 達成バッジ
+> >                     >        
+> >                     >         - ---
+> >                     >
+> >                     > ## 🚀 なぜ jump_lab なのか？
+> >                     >
+> >                     > ### 1️⃣ 市場に存在しない
+> >                     > 日本でジャンプ力を簡単に測定できるアプリは**ほぼない**。
+> >                     > バスケ選手、バレーボール選手、フィットネス愛好家みんなが待ってた。
+> >                     >
+> >                     > ### 2️⃣ 必要な機材は スマホだけ
+> >                     > ジャンプマットは高い。ジムは遠い。
+> >                     > jump_lab なら自宅で、今すぐ測定できる。
+> >                     >
+> >                     > ### 3️⃣ 記録する理由がある
+> >                     > 「測定できる」だけでなく、「継続したくなる仕組み」がある。
+> >                     > 毎日のトレーニング、グラフで見える化、達成感。
+> >                     >
+> >                     > ### 4️⃣ 完全無料 + 軽量サブスク
+> >                     > 基本機能は無料。
+> >                     > 200円で記録機能がアンロック。（検討中）
+> >                     >
+> >                     > ---
+> >                     >
+> >                     > ## 📥 インストール
+> >                     >
+> >                     > ### iOS
+> >                     > App Store から「jump_lab」で検索（リリース予定）
+> >                     >
+> >                     > ### Android
+> >                     > Google Play から「jump_lab」で検索（リリース予定）
+> >                     >
+> >                     > ### 開発環境で試す
+> >                     > ```bash
+> >                     > git clone https://github.com/dbafitge6/jump_lab.git
+> >                     > cd jump_lab
+> >                     > flutter pub get
+> >                     > flutter run
+> >                     > ```
+> >                     >
+> >                     > ---
+> >                     >
+> >                     > ## 🛠️ 技術スタック
+> >                     >
+> >                     > | 項目 | 技術 |
+> >                     > |------|------|
+> >                     > | **フレームワーク** | Flutter 3.11+ |
+> >                     > | **言語** | Dart |
+> >                     > | **センサー** | sensors_plus |
+> >                     > | **ローカルDB** | SQLite (sqflite) |
+> >                     > | **UI** | Material 3 |
+> >                     > | **カメラ** | camera, video_player |
+> >                     > | **課金** | RevenueCat (purchases_flutter) |
+> >                     > | **広告** | Google Mobile Ads |
+> >                     >
+> >                     > ---
+> >                     >
+> >                     > ## 📊 対応プラットフォーム
+> >                     >
+> >                     > - ✅ iOS 13.0+
+> >                     > - - ✅ Android 5.0+
+> >                     >   - - 🔜 Web（検討中）
+> >                     >    
+> >                     >     - ---
+> >                     >
+> >                     > ## 🎯 ターゲットユーザー
+> >                     >
+> >                     > - 🏃 ジャンプ力を上げたい全ての人
+> >                     > - - 🏀 バスケ・バレー選手
+> >                     >   - - 💪 フィットネス愛好家
+> >                     >     - - 👨‍🏫 体育の先生・スポーツ指導者
+> >                     >       - - 🎓 学生（体力測定の自主訓練）
+> >                     >        
+> >                     >         - ---
+> >                     >
+> >                     > ## 🤝 貢献ガイド
+> >                     >
+> >                     > バグレポート、機能提案、コード貢献を歓迎します！
+> >                     >
+> >                     > ### 報告方法
+> >                     > - **バグ**: GitHub Issues で報告
+> >                     > - - **機能提案**: Discussions で提案
+> >                     >   - - **コード**: Pull Request で提出
+> >                     >    
+> >                     >     - ### 開発ルール
+> >                     >     - - Dart のコード規約に従う
+> >                     >       - - flutter analyze でエラーなし
+> >                     >         - - flutter test ですべてテスト通す
+> >                     >          
+> >                     >           - ---
+> >                     >
+> >                     > ## 📝 プロジェクトロードマップ
+> >                     >
+> >                     > ### v1.0 ✅ 完了予定
+> >                     > - 基本的なジャンプ測定
+> >                     > - - カレンダー記録
+> >                     >   - - トレーニングメニュー
+> >                     >     - - iOS/Android対応
+> >                     >      
+> >                     >       - ### v1.1 🔜 次予定
+> >                     >       - - AI トレーニングガイダンス
+> >                     >         - - インターバル訓練モード
+> >                     >           - - 友達とのスコア共有機能
+> >                     >            
+> >                     >             - ### v2.0 🎯 検討中
+> >                     >             - - ウェブダッシュボード
+> >                     >               - - ソーシャル機能（ランキング）
+> >                     >                 - - ウェアラブル連携
+> >                     >                  
+> >                     >                   - ---
+> >                     >
+> >                     > ## 📧 お問い合わせ
+> >                     >
+> >                     > - **Twitter**: [@jump_lab](#)（予定）
+> >                     > - - **GitHub Issues**: [Issue を作成](#)
+> >                     >   - - **メール**: [contact](#)
+> >                     >    
+> >                     >     - ---
+> >                     >
+> >                     > ## 📄 ライセンス
+> >                     >
+> >                     > MIT License - 詳しくは [LICENSE](LICENSE) を参照
+> >                     >
+> >                     > ---
+> >                     >
+> >                     > ## 🙏 謝辞
+> >                     >
+> >                     > - Flutter コミュニティ
+> >                     > - - ユーザーの皆さんの応援
+> >                     >  
+> >                     >   - ---
+> >                     >
+> >                     > <div align="center">
+
+**毎日1回のジャンプが、あなたを変える。**
+
+[App Store](#) • [Google Play](#)
+
+</div>
