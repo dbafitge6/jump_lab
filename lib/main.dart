@@ -354,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             child: const Text(
-                              '⭐ プレミアムに登録（月180円）',
+                              '⭐ プレミアムに登録（月200円）',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -479,7 +479,7 @@ class _PremiumDialogState extends State<_PremiumDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('月180円で以下が使えます！', style: TextStyle(color: Colors.white70)),
+          Text('月200円で以下が使えます！', style: TextStyle(color: Colors.white70)),
           SizedBox(height: 12),
           Text('✅ 広告なし', style: TextStyle(color: Color(0xFF00E5FF))),
           Text('✅ 動画計測無制限', style: TextStyle(color: Color(0xFF00E5FF))),
